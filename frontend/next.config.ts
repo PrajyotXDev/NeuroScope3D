@@ -16,11 +16,9 @@ const nextConfig: NextConfig = {
   devIndicators: false,
   env: {
     NEXT_PUBLIC_LOCATE_URL: pick("NEXT_PUBLIC_LOCATE_URL", "http://localhost:3104"),
-    // The assistant module already has a hosted deployment that serves /chat/<thread> and its chat API.
-    // Allow an explicit Vercel env var to override this URL, but don't leave the production launcher unconfigured.
-    NEXT_PUBLIC_CHATBOT_URL: process.env.NEXT_PUBLIC_CHATBOT_URL ?? (dev
-      ? "http://localhost:3102"
-      : "https://screenshot-perfect-project-39.lovable.app"),
+    // Production must point at the separately deployed chatbot service (Render URL).
+    // Never silently fall back to a preview/Lovable URL that may not be reachable.
+    NEXT_PUBLIC_CHATBOT_URL: pick("NEXT_PUBLIC_CHATBOT_URL", "http://localhost:3102"),
     NEXT_PUBLIC_TRACKER_URL: pick("NEXT_PUBLIC_TRACKER_URL", "http://localhost:3103"),
   },
   async rewrites() {
