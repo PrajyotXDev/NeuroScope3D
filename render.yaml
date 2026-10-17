@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: neuroscope-ai-chatbot
+    runtime: node
+    plan: free
+    branch: main
+    rootDir: modules/screenshot-perfect-project-39
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/chat
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: NITRO_PRESET
+        value: render-com
+      - key: HOST
+        value: 0.0.0.0
