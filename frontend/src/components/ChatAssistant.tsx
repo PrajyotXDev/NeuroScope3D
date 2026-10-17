@@ -67,7 +67,7 @@ export default function ChatAssistant() {
             <div className="assistant-msg" data-testid="assistant-error">
               <AlertCircle size={24} />
               <strong>The assistant is not available.</strong>
-              <span>{state === 'unconfigured' ? <>Set <code>{m.env}</code> for this deployment.</> : <>Start {m.start}, then try again.</>}</span>
+              <span>{state === 'unconfigured' ? <>Set <code>{m.env}</code> to the deployed chatbot service URL in Vercel, then redeploy.</> : <>The deployed chatbot service did not respond. Check its Render deployment and <code>{m.env}</code> in Vercel.</>}</span>
               {state === 'down' && <button type="button" className="btn btn-secondary btn-sm" onClick={connect}><RefreshCw size={14} /> Try again</button>}
             </div>
           )}
