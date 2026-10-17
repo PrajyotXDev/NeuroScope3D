@@ -1,8 +1,8 @@
 import type { NextConfig } from "next";
 
 // Integrated modules (working copies of the supplied projects, run as their own services; see scripts/start_integrations.ps1).
-// Local development defaults apply only to `next dev`; a production build must be given real URLs through the
-// environment, so no development address can leak into a deployed site.
+// Local development defaults apply only to `next dev`. The AI assistant has a hosted fallback for deployments;
+// other modules still require their own production URL so development addresses cannot leak into a deployment.
 const dev = process.env.NODE_ENV !== "production";
 const pick = (name: string, devDefault: string) => process.env[name] ?? (dev ? devDefault : "");
 
@@ -16,7 +16,11 @@ const nextConfig: NextConfig = {
   devIndicators: false,
   env: {
     NEXT_PUBLIC_LOCATE_URL: pick("NEXT_PUBLIC_LOCATE_URL", "http://localhost:3104"),
-    NEXT_PUBLIC_CHATBOT_URL: pick("NEXT_PUBLIC_CHATBOT_URL", "http://localhost:3102"),
+    // The assistant module already has a hosted deployment that serves /chat/<thread> and its chat API.
+    // Allow an explicit Vercel env var to override this URL, but don't leave the production launcher unconfigured.
+    NEXT_PUBLIC_CHATBOT_URL: process.env.NEXT_PUBLIC_CHATBOT_URL ?? (dev
+      ? "http://localhost:3102"
+      : "https://screenshot-perfect-project-39.lovable.app"),
     NEXT_PUBLIC_TRACKER_URL: pick("NEXT_PUBLIC_TRACKER_URL", "http://localhost:3103"),
   },
   async rewrites() {
